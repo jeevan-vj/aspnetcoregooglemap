@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section scripts{
+    <script>
+
+        var map;
+        function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 8
+        });
+        }
+
+        $(document).ready(function() {
+        initMap();
+
+        var locationArray = @Html.Raw(Json.Serialize(ViewBag.Locations));
+        
+        var newArray = locationArray.map((value)  => { 
+            return  {
+                position: new google.maps.LatLng(value.lat, value.lon),
+                type:'parking' 
+            }
+        });
+          // Create markers.
+        newArray.forEach(function (feature) {
+            var marker = new google.maps.Marker({
+                position: feature.position,
+                map: map
+            });
+        });
+
+        });
+
+    </script>
+}
